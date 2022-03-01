@@ -5,6 +5,7 @@ import "@openzeppelin/contracts/token/ERC721/ERC721.sol";
 import "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol";
 import "@openzeppelin/contracts/utils/Counters.sol";
 import "@openzeppelin/contracts/utils/Address.sol";
+import "./Base64.sol";
 
 contract PlatziPunks is ERC721, ERC721Enumerable {
     using Counters for Counters.Counter;
@@ -30,6 +31,37 @@ contract PlatziPunks is ERC721, ERC721Enumerable {
         _idCounter.increment();
         Address.sendValue(owner, mintFee);
         emit NotifyTokenMintedId(tokenId);
+    }
+
+    function tokenURI(uint256 tokenId) 
+        public 
+        view 
+        override 
+        returns(string memory) 
+    {
+        require(
+            _exists(tokenId), 
+            'ERC721 Metadata: URI query for nonexistent token'
+        );
+
+        string memory encodedData = Base64.encode(
+            abi.encodePacked(
+                '{ "name": "PlatziPunks #"',
+                tokenId,
+                '", "description": "Platzi Punks are randomized Avataaars stored on chain to teach DApp development on Platzi", "image": "',
+                "// TODO: Calculate image URL",
+                '"}'
+            )
+        );
+
+        string memory jsonURI = string(
+            abi.encodePacked(
+                'data:application/json;base64,', 
+                encodedData
+            )
+        );
+
+        return jsonURI;
     }
 
     // Override required for enumerable tokens
