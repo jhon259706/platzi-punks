@@ -48,7 +48,11 @@ contract PlatziPunks is ERC721, ERC721Enumerable, PlatziPunkDNA {
             "&clotheType=", getClotheType(_dna),
             "&eyeType=", getEyeType(_dna),
             "&eyebrowType=", getEyeBrowType(_dna),
-            "&facialHairColor=", getFacialHairColor(_dna),
+            "&facialHairColor=", getFacialHairColor(_dna)
+        );
+
+        params = abi.encodePacked(
+            params,
             "&facialHairType=", getFacialHairType(_dna),
             "&hairColor=", getHairColor(_dna),
             "&hatColor=", getHatColor(_dna),
