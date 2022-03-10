@@ -5,11 +5,13 @@ import "@openzeppelin/contracts/token/ERC721/ERC721.sol";
 import "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol";
 import "@openzeppelin/contracts/utils/Counters.sol";
 import "@openzeppelin/contracts/utils/Address.sol";
+import "@openzeppelin/contracts/utils/Strings.sol";
 import "./Base64.sol";
 import "./PlatziPunkDNA.sol";
 
 contract PlatziPunks is ERC721, ERC721Enumerable, PlatziPunkDNA {
     using Counters for Counters.Counter;
+    using Strings for uint256;
 
     Counters.Counter private _idCounter;
     address payable private owner;
@@ -69,7 +71,7 @@ contract PlatziPunks is ERC721, ERC721Enumerable, PlatziPunkDNA {
         string memory baseURI = _baseURI();
         string memory paramsURI = _paramsURI(_dna);
 
-        return string(abi.encode(baseURI, "?", paramsURI));
+        return string(abi.encodePacked(baseURI, "?", paramsURI));
     }
 
     function tokenURI(uint256 tokenId) 
@@ -89,7 +91,7 @@ contract PlatziPunks is ERC721, ERC721Enumerable, PlatziPunkDNA {
         string memory encodedData = Base64.encode(
             abi.encodePacked(
                 '{', 
-                '"name": "PlatziPunks #', tokenId, '", ',
+                '"name": "PlatziPunks #', tokenId.toString(), '", ',
                 '"description": "Platzi Punks are randomized Avataaars stored on chain to teach DApp development on Platzi", ',
                 '"image": "', image, '"',
                 '}'

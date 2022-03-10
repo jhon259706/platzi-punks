@@ -50,13 +50,24 @@ describe("Platzi Punks NFT contract", function () {
     });
   });
 
-  // it("Check token URI", async function () {
-  //   expect(await PlatziPunksContract.tokenURI(0)).to.equal(
-  //     "data:application/json;base64,eyAibmFtZSI6ICJQbGF0emlQdW5rcyAj" +
-  //       "IgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAIiwgImRlc2NyaXB0aW" +
-  //       "9uIjogIlBsYXR6aSBQdW5rcyBhcmUgcmFuZG9taXplZCBBdmF0YWFhcnMgc3Rv" +
-  //       "cmVkIG9uIGNoYWluIHRvIHRlYWNoIERBcHAgZGV2ZWxvcG1lbnQgb24gUGxhdH" +
-  //       "ppIiwgImltYWdlIjogIi8vIFRPRE86IENhbGN1bGF0ZSBpbWFnZSBVUkwifQ=="
-  //   );
-  // });
+  describe("tokenURI", () => {
+    it("Valid metadata", async function () {
+      const { deployed } = await setup({});
+      await deployed.mint({ value: ethers.utils.parseEther("0.01") });
+
+      const tokenURI = await deployed.tokenURI(0);
+      const stringifiedTokenURI = await tokenURI.toString();
+      const [, base64JSON] = stringifiedTokenURI.split(
+        "data:application/json;base64,"
+      );
+      const stringifiedMetadata = await Buffer.from(
+        base64JSON,
+        "base64"
+      ).toString("ascii");
+
+      const metadata = JSON.parse(stringifiedMetadata);
+
+      expect(metadata).to.have.all.keys("name", "description", "image");
+    });
+  });
 });
