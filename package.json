@@ -15,7 +15,8 @@
   "scripts": {
     "compile": "npx hardhat compile",
     "test": "npx hardhat test",
-    "deploy": "npx hardhat run"
+    "deploy": "npx hardhat run",
+    "flatten": "npx hardhat flatten > Flattened.sol"
   },
   "dependencies": {
     "@openzeppelin/contracts": "^4.4.2"
